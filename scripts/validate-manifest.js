@@ -7,7 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const MANIFEST_PATH = path.join(__dirname, '..', 'manifest.json');
+const MANIFEST_PATH = path.join(__dirname, '..', 'extension', 'manifest.json');
 
 // Required fields for Manifest V3
 const REQUIRED_FIELDS = ['manifest_version', 'name', 'version'];

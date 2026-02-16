@@ -4,8 +4,8 @@
   "description": "A sidebar extension to help Zendesk users view ticket information",
   "private": true,
   "scripts": {
-    "lint": "eslint *.js",
-    "lint:fix": "eslint *.js --fix",
+    "lint": "eslint extension/**/*.js",
+    "lint:fix": "eslint extension/**/*.js --fix",
     "validate:manifest": "node scripts/validate-manifest.js"
   },
   "devDependencies": {
