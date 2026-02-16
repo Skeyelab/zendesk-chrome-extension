@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zendesk Extension - Test Page</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    .section {
+      background: #f5f5f5;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    code {
+      background: #e0e0e0;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .note {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 12px;
+      margin: 16px 0;
+    }
+    
+    ol {
+      margin-left: 20px;
+    }
+    
+    li {
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Zendesk Sidebar Extension - Testing Guide</h1>
+  
+  <div class="section">
+    <h2>Installation Instructions</h2>
+    <ol>
+      <li>Open Chrome and navigate to <code>chrome://extensions/</code></li>
+      <li>Enable "Developer mode" using the toggle in the top right corner</li>
+      <li>Click "Load unpacked" button</li>
+      <li>Select this directory: <code>zendesk-chrome-extension</code></li>
+      <li>The extension should now be installed and visible in your extensions list</li>
+    </ol>
+  </div>
+  
+  <div class="section">
+    <h2>Testing the Extension</h2>
+    <p><strong>Note:</strong> Since this is a test environment, you'll need to test on an actual Zendesk instance.</p>
+    
+    <h3>Option 1: Test on a real Zendesk instance</h3>
+    <ol>
+      <li>Navigate to your Zendesk instance (e.g., <code>yourcompany.zendesk.com</code>)</li>
+      <li>Log in and open any ticket</li>
+      <li>The sidebar should appear automatically on the right side</li>
+      <li>You should see:
+        <ul>
+          <li>Ticket ID</li>
+          <li>Requester Name</li>
+          <li>Requester Email</li>
+        </ul>
+      </li>
+    </ol>
+    
+    <h3>Option 2: Test with a Zendesk trial account</h3>
+    <ol>
+      <li>Sign up for a free Zendesk trial at <code>zendesk.com</code></li>
+      <li>Create a test ticket</li>
+      <li>Open the ticket to see the sidebar in action</li>
+    </ol>
+  </div>
+  
+  <div class="section">
+    <h2>Extension Features</h2>
+    <ul>
+      <li><strong>Automatic Detection:</strong> The sidebar appears automatically when viewing a ticket</li>
+      <li><strong>Settings:</strong> Click the extension icon → "Open Settings" to configure</li>
+      <li><strong>Domain Filter:</strong> Optionally restrict to specific Zendesk instances</li>
+      <li><strong>Close Button:</strong> Click × in the sidebar header to hide it</li>
+    </ul>
+  </div>
+  
+  <div class="note">
+    <strong>Future Enhancements:</strong> This extension is designed to be extensible. Future versions will include integrations with external API systems like Swell.is, providing agents with quick access to customer data from multiple sources.
+  </div>
+  
+  <div class="section">
+    <h2>Troubleshooting</h2>
+    <ul>
+      <li><strong>Sidebar not appearing?</strong> Make sure you're on a Zendesk ticket page (URL should contain <code>/agent/tickets/</code>)</li>
+      <li><strong>Information not loading?</strong> The page might still be loading. Wait a few seconds for the dynamic content to appear.</li>
+      <li><strong>Extension not working?</strong> Check the settings to ensure it's enabled and the domain filter (if set) matches your Zendesk instance.</li>
+    </ul>
+  </div>
+  
+  <div class="section">
+    <h2>File Structure</h2>
+    <pre><code>zendesk-chrome-extension/
+├── manifest.json       # Extension configuration
+├── content.js          # Main script that injects the sidebar
+├── sidebar.css         # Sidebar styling
+├── options.html/js     # Settings page
+├── popup.html/js       # Extension popup
+├── icons/              # Extension icons
+└── README.md           # Documentation</code></pre>
+  </div>
+</body>
+</html>
