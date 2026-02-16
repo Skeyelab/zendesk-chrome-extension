@@ -1,12 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Zendesk Sidebar Extension",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A sidebar extension to help Zendesk users view ticket information",
   "permissions": [
     "storage",
     "activeTab",
-    "scripting"
+    "scripting",
+    "tabs",
+    "sidePanel"
   ],
   "host_permissions": [
     "https://*.zendesk.com/*"
@@ -15,14 +17,17 @@
     {
       "matches": ["https://*.zendesk.com/*"],
       "js": ["content.js"],
-      "css": ["sidebar.css"],
       "run_at": "document_idle"
     }
   ],
   "background": {
     "service_worker": "background.js"
   },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
   "action": {
+    "default_title": "Toggle Zendesk Helper",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
