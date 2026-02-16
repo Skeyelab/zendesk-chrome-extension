@@ -15,16 +15,20 @@ Successfully implemented a Chrome extension that provides a sidebar for Zendesk 
 - ✅ Clean, modern sidebar UI with gradient styling
 - ✅ Viewport resizing (like Invoice Ninja) - sidebar appears next to content, not overlaying it
 - ✅ Smooth page content transitions when sidebar opens/closes
+- ✅ Extension icon click to toggle sidebar open/closed
+- ✅ Settings button integrated into sidebar header
 - ✅ Close button to hide sidebar and restore original layout
 
 #### Configuration & Settings
 - ✅ Settings page to configure Zendesk domain filter
 - ✅ Toggle to enable/disable sidebar
-- ✅ Popup interface for quick access to settings
+- ✅ Settings accessible via ⚙ button in sidebar header
 - ✅ Chrome sync storage for settings persistence
 
 #### Technical Implementation
 - ✅ Manifest V3 (latest Chrome extension standard)
+- ✅ Background service worker for extension icon click handling
+- ✅ Message passing between background and content scripts
 - ✅ Content script injection on Zendesk pages
 - ✅ CSS animations for smooth sidebar appearance
 - ✅ Responsive design for different screen sizes
@@ -56,19 +60,22 @@ Successfully implemented a Chrome extension that provides a sidebar for Zendesk 
 ```
 zendesk-chrome-extension/
 ├── manifest.json          # Extension configuration (Manifest V3)
-├── content.js            # Main content script (6KB, with XSS protection)
-├── sidebar.css           # Sidebar styling (2.7KB, responsive design)
-├── options.html          # Settings page HTML (3.6KB)
-├── options.js            # Settings page logic (1.1KB)
-├── popup.html            # Extension popup HTML (1.5KB)
-├── popup.js              # Extension popup logic (244 bytes)
+├── background.js          # Service worker for extension icon clicks
+├── content.js            # Main content script with sidebar logic and XSS protection
+├── sidebar.css           # Sidebar styling (responsive design)
+├── options.html          # Settings page HTML
+├── options.js            # Settings page logic
 ├── icons/                # Extension icons (16px, 48px, 128px)
 │   ├── icon16.png
 │   ├── icon48.png
 │   ├── icon128.png
 │   └── icon.svg
-├── README.md             # Comprehensive documentation (2.8KB)
-├── TEST.html             # Testing guide (4.1KB)
+├── README.md             # Comprehensive documentation
+├── TEST.html             # Testing guide
+├── DEMO.html             # Visual mockup demo
+├── IMPLEMENTATION.md     # Technical implementation details
+└── .gitignore            # Git ignore file
+```
 ├── DEMO.html             # Visual mockup demo (6.1KB)
 └── .gitignore            # Git ignore file
 ```

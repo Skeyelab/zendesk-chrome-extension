@@ -7,7 +7,8 @@ A Chrome extension that provides a convenient sidebar for Zendesk agents, displa
 - 🎯 **Automatic Ticket Detection** - Automatically detects when you're viewing a Zendesk ticket
 - 📋 **Ticket Information** - Displays the current ticket ID
 - 👤 **Requester Details** - Shows requester name and email
-- ⚙️ **Configurable** - Settings page to customize which Zendesk instances to enable
+- 🖱️ **One-Click Access** - Click extension icon to toggle sidebar open/closed
+- ⚙️ **Integrated Settings** - Settings button built into sidebar header for easy access
 - 🎨 **Clean UI** - Beautiful, modern sidebar design that resizes the viewport (like Invoice Ninja) instead of overlaying content
 - 🔄 **Smooth Transitions** - Animated sidebar appearance with page content resizing
 
@@ -35,18 +36,23 @@ The extension will be available in the Chrome Web Store soon.
 
 ## Usage
 
-1. **Initial Setup**:
-   - Click the extension icon in your Chrome toolbar
-   - Click "Open Settings"
-   - (Optional) Enter your Zendesk domain (e.g., `yourcompany.zendesk.com`)
-   - Leave empty to work with any Zendesk instance
+1. **Opening the Sidebar**:
+   - Navigate to any Zendesk page
+   - Click the extension icon in your Chrome toolbar to toggle the sidebar open/closed
+   - The sidebar will automatically show ticket information when you're on a ticket page
 
 2. **Using the Sidebar**:
-   - Navigate to any ticket in your Zendesk instance
-   - The sidebar will automatically appear on the right side, resizing the page content to accommodate it
+   - The sidebar appears on the right side, resizing the page content to accommodate it
    - The page content smoothly adjusts to make room for the sidebar (similar to Invoice Ninja's approach)
    - View ticket ID and requester information at a glance
+   - Click the ⚙ (settings) button to configure the extension
    - Click the × button to close the sidebar and restore the original page layout
+
+3. **Configuration**:
+   - Click the ⚙ (settings) button in the sidebar header
+   - (Optional) Enter your Zendesk domain (e.g., `yourcompany.zendesk.com`)
+   - Leave empty to work with any Zendesk instance
+   - Toggle the sidebar enable/disable setting
 
 ## Configuration
 
