@@ -85,12 +85,23 @@
       justify-content: space-between;
       align-items: center;
     }
+    
+    .zendesk-ext-header-title {
+      flex: 1;
+    }
+    
+    .zendesk-ext-header-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
 
+    .zendesk-ext-settings,
     .zendesk-ext-close {
       background: rgba(255, 255, 255, 0.2);
       border: none;
       color: white;
-      font-size: 28px;
+      font-size: 20px;
       line-height: 1;
       width: 32px;
       height: 32px;
@@ -102,7 +113,12 @@
       transition: background 0.2s;
       padding: 0;
     }
+    
+    .zendesk-ext-close {
+      font-size: 28px;
+    }
 
+    .zendesk-ext-settings:hover,
     .zendesk-ext-close:hover {
       background: rgba(255, 255, 255, 0.3);
     }
@@ -211,8 +227,11 @@
   <!-- The Sidebar -->
   <div class="zendesk-ext-sidebar">
     <div class="zendesk-ext-header">
-      Zendesk Helper
-      <button class="zendesk-ext-close" title="Close sidebar">×</button>
+      <span class="zendesk-ext-header-title">Zendesk Helper</span>
+      <div class="zendesk-ext-header-buttons">
+        <button class="zendesk-ext-settings" title="Open settings">⚙</button>
+        <button class="zendesk-ext-close" title="Close sidebar">×</button>
+      </div>
     </div>
     
     <div class="zendesk-ext-content">

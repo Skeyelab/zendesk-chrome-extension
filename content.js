@@ -15,6 +15,14 @@
   // Store interval and observer references for cleanup
   let updateInterval = null;
   let urlObserver = null;
+  let sidebarInitialized = false;
+
+  // Listen for messages from background script
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'toggleSidebar') {
+      toggleSidebar();
+    }
+  });
 
   // Check if we're on a Zendesk ticket page
   function isTicketPage() {
@@ -51,11 +59,21 @@
     
     const header = document.createElement('div');
     header.className = 'zendesk-ext-header';
-    header.textContent = 'Zendesk Helper';
     
-    const content = document.createElement('div');
-    content.className = 'zendesk-ext-content';
-    content.id = 'zendesk-ext-content';
+    const headerTitle = document.createElement('span');
+    headerTitle.textContent = 'Zendesk Helper';
+    headerTitle.className = 'zendesk-ext-header-title';
+    
+    const headerButtons = document.createElement('div');
+    headerButtons.className = 'zendesk-ext-header-buttons';
+    
+    const settingsBtn = document.createElement('button');
+    settingsBtn.className = 'zendesk-ext-settings';
+    settingsBtn.innerHTML = '⚙';
+    settingsBtn.title = 'Open settings';
+    settingsBtn.onclick = () => {
+      chrome.runtime.openOptionsPage();
+    };
     
     const closeBtn = document.createElement('button');
     closeBtn.className = 'zendesk-ext-close';
@@ -65,13 +83,22 @@
       hideSidebar();
     };
     
-    header.appendChild(closeBtn);
+    const content = document.createElement('div');
+    content.className = 'zendesk-ext-content';
+    content.id = 'zendesk-ext-content';
+    
+    headerButtons.appendChild(settingsBtn);
+    headerButtons.appendChild(closeBtn);
+    header.appendChild(headerTitle);
+    header.appendChild(headerButtons);
     sidebar.appendChild(header);
     sidebar.appendChild(content);
     document.body.appendChild(sidebar);
     
     // Resize the page content to make room for sidebar
     resizePageContent(true);
+    
+    sidebarInitialized = true;
     
     return content;
   }
@@ -84,6 +111,46 @@
     } else {
       // Remove inline style to restore original layout
       document.body.style.marginRight = '';
+    }
+  }
+  
+  // Show sidebar
+  function showSidebar() {
+    const sidebar = document.getElementById('zendesk-extension-sidebar');
+    if (sidebar) {
+      sidebar.classList.remove('zendesk-ext-hidden');
+      resizePageContent(true);
+      
+      // Restart update interval if needed
+      if (!updateInterval && isTicketPage()) {
+        const contentDiv = document.getElementById('zendesk-ext-content');
+        if (contentDiv) {
+          updateSidebarContent(contentDiv);
+          updateInterval = setInterval(() => {
+            if (sidebar && !sidebar.classList.contains('zendesk-ext-hidden') && isTicketPage()) {
+              updateSidebarContent(contentDiv);
+            }
+          }, CONTENT_UPDATE_INTERVAL_MS);
+        }
+      }
+    }
+  }
+  
+  // Toggle sidebar visibility
+  function toggleSidebar() {
+    const sidebar = document.getElementById('zendesk-extension-sidebar');
+    
+    if (!sidebar) {
+      // Sidebar doesn't exist yet, create it
+      if (isTicketPage()) {
+        init();
+      }
+    } else if (sidebar.classList.contains('zendesk-ext-hidden')) {
+      // Sidebar is hidden, show it
+      showSidebar();
+    } else {
+      // Sidebar is visible, hide it
+      hideSidebar();
     }
   }
   
