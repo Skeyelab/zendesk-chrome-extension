@@ -1,0 +1,16 @@
+---
+description: Work in Test-Driven Development (TDD) — tests first, then implementation
+alwaysApply: true
+---
+
+# Test-Driven Development (TDD)
+
+We always work in TDD. For any feature or bugfix:
+
+1. **Red:** Write or update tests that define the desired behavior first. Run them and see them fail (or fail to exist).
+2. **Green:** Implement the minimum code to make the tests pass.
+3. **Refactor:** Clean up the implementation while keeping tests green.
+
+- Prefer unit tests for logic; use integration or E2E only when necessary.
+- For new code paths (extension, proxy, or tooling), add tests before or alongside implementation — never leave production code untested.
+- CI must run the test suite; PRs should not merge with failing tests.
