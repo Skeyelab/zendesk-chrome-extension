@@ -90,6 +90,32 @@ The extension consists of:
 - `popup.html/js` - Extension popup
 - `icons/` - Extension icons
 
+### Running Checks Locally
+
+Before submitting a pull request, make sure to run the following checks:
+
+1. **Install dependencies** (first time only):
+   ```bash
+   npm install
+   ```
+
+2. **Run linter**:
+   ```bash
+   npm run lint
+   ```
+
+3. **Validate manifest.json**:
+   ```bash
+   npm run validate:manifest
+   ```
+
+4. **Auto-fix linting issues** (optional):
+   ```bash
+   npm run lint:fix
+   ```
+
+These checks are automatically run in CI on every push and pull request.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
