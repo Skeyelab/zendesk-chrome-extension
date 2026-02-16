@@ -81,10 +81,9 @@
     if (show) {
       // Add margin to body to push content left
       document.body.style.marginRight = `${SIDEBAR_WIDTH}px`;
-      document.body.style.transition = 'margin-right 0.3s ease-out';
     } else {
-      // Remove margin to restore original layout
-      document.body.style.marginRight = '0';
+      // Remove inline style to restore original layout
+      document.body.style.marginRight = '';
     }
   }
   
