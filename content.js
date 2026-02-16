@@ -1,0 +1,154 @@
+// Content script that runs on Zendesk pages
+(function() {
+  'use strict';
+
+  // Check if sidebar already exists
+  if (document.getElementById('zendesk-extension-sidebar')) {
+    return;
+  }
+
+  // Check if we're on a Zendesk ticket page
+  function isTicketPage() {
+    return window.location.pathname.includes('/agent/tickets/');
+  }
+
+  // Extract ticket ID from URL
+  function getTicketId() {
+    const match = window.location.pathname.match(/\/agent\/tickets\/(\d+)/);
+    return match ? match[1] : null;
+  }
+
+  // Extract requester information from the page
+  function getRequesterInfo() {
+    // Try multiple selectors to find requester info
+    const requesterName = document.querySelector('[data-test-id="ticket-requester-name"]') ||
+                         document.querySelector('.requester .name') ||
+                         document.querySelector('[data-garden-id="typography.anchor"]');
+    
+    const requesterEmail = document.querySelector('[data-test-id="ticket-requester-email"]') ||
+                          document.querySelector('.requester .email');
+    
+    return {
+      name: requesterName ? requesterName.textContent.trim() : 'Loading...',
+      email: requesterEmail ? requesterEmail.textContent.trim() : 'Loading...'
+    };
+  }
+
+  // Create the sidebar
+  function createSidebar() {
+    const sidebar = document.createElement('div');
+    sidebar.id = 'zendesk-extension-sidebar';
+    sidebar.className = 'zendesk-ext-sidebar';
+    
+    const header = document.createElement('div');
+    header.className = 'zendesk-ext-header';
+    header.textContent = 'Zendesk Helper';
+    
+    const content = document.createElement('div');
+    content.className = 'zendesk-ext-content';
+    content.id = 'zendesk-ext-content';
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'zendesk-ext-close';
+    closeBtn.innerHTML = '×';
+    closeBtn.title = 'Close sidebar';
+    closeBtn.onclick = () => {
+      sidebar.style.display = 'none';
+    };
+    
+    header.appendChild(closeBtn);
+    sidebar.appendChild(header);
+    sidebar.appendChild(content);
+    document.body.appendChild(sidebar);
+    
+    return content;
+  }
+
+  // Update sidebar content with ticket information
+  function updateSidebarContent(contentDiv) {
+    const ticketId = getTicketId();
+    const requester = getRequesterInfo();
+    
+    if (ticketId) {
+      contentDiv.innerHTML = `
+        <div class="zendesk-ext-section">
+          <h3>Ticket Information</h3>
+          <div class="zendesk-ext-field">
+            <label>Ticket ID:</label>
+            <span class="zendesk-ext-value">#${ticketId}</span>
+          </div>
+        </div>
+        
+        <div class="zendesk-ext-section">
+          <h3>Requester</h3>
+          <div class="zendesk-ext-field">
+            <label>Name:</label>
+            <span class="zendesk-ext-value">${requester.name}</span>
+          </div>
+          <div class="zendesk-ext-field">
+            <label>Email:</label>
+            <span class="zendesk-ext-value">${requester.email}</span>
+          </div>
+        </div>
+        
+        <div class="zendesk-ext-footer">
+          <small>Zendesk Sidebar Extension v1.0</small>
+        </div>
+      `;
+    } else {
+      contentDiv.innerHTML = `
+        <div class="zendesk-ext-section">
+          <p>No ticket detected. Please navigate to a ticket page.</p>
+        </div>
+      `;
+    }
+  }
+
+  // Initialize the sidebar
+  function init() {
+    // Check if we should show the sidebar based on settings
+    chrome.storage.sync.get(['zendeskDomain', 'sidebarEnabled'], (result) => {
+      const sidebarEnabled = result.sidebarEnabled !== false; // Default to true
+      const configuredDomain = result.zendeskDomain || '';
+      
+      // Check if current domain matches configured domain (if set)
+      const currentDomain = window.location.hostname;
+      const shouldShow = sidebarEnabled && (
+        !configuredDomain || 
+        currentDomain.includes(configuredDomain) ||
+        configuredDomain === ''
+      );
+      
+      if (shouldShow && isTicketPage()) {
+        const contentDiv = createSidebar();
+        updateSidebarContent(contentDiv);
+        
+        // Update sidebar when URL changes (SPA navigation)
+        let lastUrl = location.href;
+        new MutationObserver(() => {
+          const url = location.href;
+          if (url !== lastUrl) {
+            lastUrl = url;
+            if (isTicketPage()) {
+              setTimeout(() => updateSidebarContent(contentDiv), 500);
+            }
+          }
+        }).observe(document, { subtree: true, childList: true });
+        
+        // Also update periodically to catch dynamic content loading
+        setInterval(() => {
+          if (isTicketPage()) {
+            updateSidebarContent(contentDiv);
+          }
+        }, 2000);
+      }
+    });
+  }
+
+  // Wait for page to be fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
