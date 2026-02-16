@@ -1,5 +1,10 @@
 /* Zendesk Extension Sidebar Styles */
 
+/* Add smooth transition to body for margin changes */
+body {
+  transition: margin-right 0.3s ease-out;
+}
+
 .zendesk-ext-sidebar {
   position: fixed;
   top: 0;

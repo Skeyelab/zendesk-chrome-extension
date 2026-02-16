@@ -5,6 +5,7 @@
   // Constants
   const URL_CHANGE_DEBOUNCE_MS = 500;
   const CONTENT_UPDATE_INTERVAL_MS = 2000;
+  const SIDEBAR_WIDTH = 320; // Width of sidebar in pixels
 
   // Check if sidebar already exists
   if (document.getElementById('zendesk-extension-sidebar')) {
@@ -61,16 +62,7 @@
     closeBtn.innerHTML = '×';
     closeBtn.title = 'Close sidebar';
     closeBtn.onclick = () => {
-      sidebar.classList.add('zendesk-ext-hidden');
-      // Clean up intervals and observers when sidebar is closed
-      if (updateInterval) {
-        clearInterval(updateInterval);
-        updateInterval = null;
-      }
-      if (urlObserver) {
-        urlObserver.disconnect();
-        urlObserver = null;
-      }
+      hideSidebar();
     };
     
     header.appendChild(closeBtn);
@@ -78,7 +70,41 @@
     sidebar.appendChild(content);
     document.body.appendChild(sidebar);
     
+    // Resize the page content to make room for sidebar
+    resizePageContent(true);
+    
     return content;
+  }
+  
+  // Resize page content to accommodate sidebar
+  function resizePageContent(show) {
+    if (show) {
+      // Add margin to body to push content left
+      document.body.style.marginRight = `${SIDEBAR_WIDTH}px`;
+      document.body.style.transition = 'margin-right 0.3s ease-out';
+    } else {
+      // Remove margin to restore original layout
+      document.body.style.marginRight = '0';
+    }
+  }
+  
+  // Hide sidebar and restore page layout
+  function hideSidebar() {
+    const sidebar = document.getElementById('zendesk-extension-sidebar');
+    if (sidebar) {
+      sidebar.classList.add('zendesk-ext-hidden');
+      resizePageContent(false);
+    }
+    
+    // Clean up intervals and observers when sidebar is closed
+    if (updateInterval) {
+      clearInterval(updateInterval);
+      updateInterval = null;
+    }
+    if (urlObserver) {
+      urlObserver.disconnect();
+      urlObserver = null;
+    }
   }
 
   // Helper function to escape HTML to prevent XSS
