@@ -81,18 +81,26 @@
     return content;
   }
 
+  // Helper function to escape HTML to prevent XSS
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   // Update sidebar content with ticket information
   function updateSidebarContent(contentDiv) {
     const ticketId = getTicketId();
     const requester = getRequesterInfo();
     
     if (ticketId) {
+      // Use template with escaped values to prevent XSS
       contentDiv.innerHTML = `
         <div class="zendesk-ext-section">
           <h3>Ticket Information</h3>
           <div class="zendesk-ext-field">
             <label>Ticket ID:</label>
-            <span class="zendesk-ext-value">#${ticketId}</span>
+            <span class="zendesk-ext-value">#${escapeHtml(ticketId)}</span>
           </div>
         </div>
         
@@ -100,11 +108,11 @@
           <h3>Requester</h3>
           <div class="zendesk-ext-field">
             <label>Name:</label>
-            <span class="zendesk-ext-value">${requester.name}</span>
+            <span class="zendesk-ext-value">${escapeHtml(requester.name)}</span>
           </div>
           <div class="zendesk-ext-field">
             <label>Email:</label>
-            <span class="zendesk-ext-value">${requester.email}</span>
+            <span class="zendesk-ext-value">${escapeHtml(requester.email)}</span>
           </div>
         </div>
         
@@ -132,8 +140,7 @@
       const currentDomain = window.location.hostname;
       const shouldShow = sidebarEnabled && (
         !configuredDomain || 
-        currentDomain.includes(configuredDomain) ||
-        configuredDomain === ''
+        currentDomain.includes(configuredDomain)
       );
       
       if (shouldShow && isTicketPage()) {
