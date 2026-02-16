@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       status.className = 'status success';
       
       setTimeout(() => {
-        status.style.display = 'none';
+        status.className = 'status';
       }, 3000);
     });
   });

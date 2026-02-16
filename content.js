@@ -2,10 +2,18 @@
 (function() {
   'use strict';
 
+  // Constants
+  const URL_CHANGE_DEBOUNCE_MS = 500;
+  const CONTENT_UPDATE_INTERVAL_MS = 2000;
+
   // Check if sidebar already exists
   if (document.getElementById('zendesk-extension-sidebar')) {
     return;
   }
+
+  // Store interval and observer references for cleanup
+  let updateInterval = null;
+  let urlObserver = null;
 
   // Check if we're on a Zendesk ticket page
   function isTicketPage() {
@@ -53,7 +61,16 @@
     closeBtn.innerHTML = '×';
     closeBtn.title = 'Close sidebar';
     closeBtn.onclick = () => {
-      sidebar.style.display = 'none';
+      sidebar.classList.add('zendesk-ext-hidden');
+      // Clean up intervals and observers when sidebar is closed
+      if (updateInterval) {
+        clearInterval(updateInterval);
+        updateInterval = null;
+      }
+      if (urlObserver) {
+        urlObserver.disconnect();
+        urlObserver = null;
+      }
     };
     
     header.appendChild(closeBtn);
@@ -124,23 +141,27 @@
         updateSidebarContent(contentDiv);
         
         // Update sidebar when URL changes (SPA navigation)
+        // Observe only the body to reduce mutation observer overhead
         let lastUrl = location.href;
-        new MutationObserver(() => {
+        urlObserver = new MutationObserver(() => {
           const url = location.href;
           if (url !== lastUrl) {
             lastUrl = url;
             if (isTicketPage()) {
-              setTimeout(() => updateSidebarContent(contentDiv), 500);
+              setTimeout(() => updateSidebarContent(contentDiv), URL_CHANGE_DEBOUNCE_MS);
             }
           }
-        }).observe(document, { subtree: true, childList: true });
+        });
+        urlObserver.observe(document.body, { subtree: true, childList: true });
         
         // Also update periodically to catch dynamic content loading
-        setInterval(() => {
-          if (isTicketPage()) {
+        // Store interval ID for cleanup
+        updateInterval = setInterval(() => {
+          const sidebar = document.getElementById('zendesk-extension-sidebar');
+          if (sidebar && !sidebar.classList.contains('zendesk-ext-hidden') && isTicketPage()) {
             updateSidebarContent(contentDiv);
           }
-        }, 2000);
+        }, CONTENT_UPDATE_INTERVAL_MS);
       }
     });
   }
