@@ -13,7 +13,9 @@ Successfully implemented a Chrome extension that provides a sidebar for Zendesk 
 - ✅ Display of requester name
 - ✅ Display of requester email
 - ✅ Clean, modern sidebar UI with gradient styling
-- ✅ Close button to hide sidebar when needed
+- ✅ Viewport resizing (like Invoice Ninja) - sidebar appears next to content, not overlaying it
+- ✅ Smooth page content transitions when sidebar opens/closes
+- ✅ Close button to hide sidebar and restore original layout
 
 #### Configuration & Settings
 - ✅ Settings page to configure Zendesk domain filter
@@ -42,6 +44,7 @@ Successfully implemented a Chrome extension that provides a sidebar for Zendesk 
 - ✅ **Resource Cleanup**: Proper cleanup of intervals and observers when sidebar closes
 - ✅ **Named Constants**: Configurable timing values (debounce: 500ms, polling: 2000ms)
 - ✅ **Conditional Updates**: Only updates when sidebar is visible
+- ✅ **Smooth Transitions**: CSS transitions for viewport resizing (0.3s ease-out)
 
 #### Code Quality
 - ✅ **No Code Review Issues**: All code review feedback addressed
@@ -76,7 +79,8 @@ The extension features a modern, professional design:
 - **Color Scheme**: Purple-blue gradient (#667eea to #764ba2)
 - **Typography**: System fonts for native look and feel
 - **Layout**: Clean, card-based information display
-- **Animation**: Smooth slide-in effect for sidebar appearance
+- **Viewport Behavior**: Resizes page content (like Invoice Ninja) instead of overlaying - sidebar appears next to the page
+- **Animation**: Smooth slide-in effect for sidebar appearance with page content resizing (0.3s transition)
 - **Accessibility**: High contrast, clear labels, readable fonts
 
 ### Installation Instructions

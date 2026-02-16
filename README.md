@@ -8,7 +8,8 @@ A Chrome extension that provides a convenient sidebar for Zendesk agents, displa
 - 📋 **Ticket Information** - Displays the current ticket ID
 - 👤 **Requester Details** - Shows requester name and email
 - ⚙️ **Configurable** - Settings page to customize which Zendesk instances to enable
-- 🎨 **Clean UI** - Beautiful, modern sidebar design that doesn't interfere with your workflow
+- 🎨 **Clean UI** - Beautiful, modern sidebar design that resizes the viewport (like Invoice Ninja) instead of overlaying content
+- 🔄 **Smooth Transitions** - Animated sidebar appearance with page content resizing
 
 ## Installation
 
@@ -42,9 +43,10 @@ The extension will be available in the Chrome Web Store soon.
 
 2. **Using the Sidebar**:
    - Navigate to any ticket in your Zendesk instance
-   - The sidebar will automatically appear on the right side
+   - The sidebar will automatically appear on the right side, resizing the page content to accommodate it
+   - The page content smoothly adjusts to make room for the sidebar (similar to Invoice Ninja's approach)
    - View ticket ID and requester information at a glance
-   - Click the × button to close the sidebar if needed
+   - Click the × button to close the sidebar and restore the original page layout
 
 ## Configuration
 
