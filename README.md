@@ -1,20 +1,22 @@
 # Zendesk Sidebar Extension
 
-A Chrome extension that provides a convenient sidebar for Zendesk agents, displaying ticket information and requester details.
+A Chrome extension that provides a convenient side panel for Zendesk agents, displaying ticket information and requester details. Includes a backend proxy for secure Zendesk API access.
+
+## Repo structure
+
+```
+extension/   Chrome extension (side panel, content script, options)
+proxy/       Backend proxy for Zendesk OAuth + API (deployed via Coolify)
+```
 
 ## Features
 
-- 🎯 **Automatic Ticket Detection** - Automatically detects when you're viewing a Zendesk ticket
-- 📋 **Ticket Information** - Displays the current ticket ID
-- 👤 **Requester Details** - Shows requester name and email
-- 🖱️ **One-Click Access** - Click extension icon to toggle sidebar open/closed
-- ⚙️ **Integrated Settings** - Settings button built into sidebar header for easy access
-- 🎨 **Clean UI** - Beautiful, modern sidebar design that resizes the viewport (like Invoice Ninja) instead of overlaying content
-- 🔄 **Smooth Transitions** - Animated sidebar appearance with page content resizing
+- **Side Panel** — Uses Chrome's native Side Panel API; Zendesk viewport resizes automatically (like Invoice Ninja)
+- **Automatic Ticket Detection** — Detects when you're viewing a Zendesk ticket
+- **Ticket Information** — Displays ticket ID, requester name, and email
+- **One-Click Access** — Click the extension icon to open the side panel
 
-## Installation
-
-### For Development
+## Installation (Development)
 
 1. Clone this repository:
    ```bash
@@ -26,69 +28,46 @@ A Chrome extension that provides a convenient sidebar for Zendesk agents, displa
 
 3. Enable "Developer mode" (toggle in the top right)
 
-4. Click "Load unpacked" and select the extension directory
+4. Click "Load unpacked" and select the **`extension/`** directory
 
 5. The extension icon should appear in your Chrome toolbar
 
-### For Users
-
-The extension will be available in the Chrome Web Store soon.
-
 ## Usage
 
-1. **Opening the Sidebar**:
-   - Navigate to any Zendesk page
-   - Click the extension icon in your Chrome toolbar to toggle the sidebar open/closed
-   - The sidebar will automatically show ticket information when you're on a ticket page
-
-2. **Using the Sidebar**:
-   - The sidebar appears on the right side, resizing the page content to accommodate it
-   - The page content smoothly adjusts to make room for the sidebar (similar to Invoice Ninja's approach)
-   - View ticket ID and requester information at a glance
-   - Click the ⚙ (settings) button to configure the extension
-   - Click the × button to close the sidebar and restore the original page layout
-
-3. **Configuration**:
-   - Click the ⚙ (settings) button in the sidebar header
-   - (Optional) Enter your Zendesk domain (e.g., `yourcompany.zendesk.com`)
-   - Leave empty to work with any Zendesk instance
-   - Toggle the sidebar enable/disable setting
+1. Navigate to any Zendesk ticket page
+2. Click the extension icon in your toolbar — the side panel opens on the right
+3. Zendesk resizes to make room (no overlay)
+4. Ticket ID and requester info display automatically
+5. Click the gear icon in the side panel header to open settings
 
 ## Configuration
 
-Access the settings page by:
-- Clicking the extension icon and selecting "Open Settings"
-- Or right-clicking the extension icon and selecting "Options"
+Access settings via the gear icon in the side panel, or right-click the extension icon and select "Options".
 
-### Settings Options:
-
-- **Zendesk Domain**: Restrict the extension to a specific Zendesk instance (optional)
-- **Enable Sidebar**: Toggle the sidebar on/off
-
-## Future Enhancements
-
-🚀 The roadmap includes:
-- Integration with external API systems (e.g., Swell.is)
-- Additional ticket details and metadata
-- Quick actions and shortcuts
-- Custom fields display
-- Enhanced requester information
+- **Zendesk Domain** — Restrict the extension to a specific Zendesk instance (optional; leave empty for all)
+- **Enable Sidebar** — Toggle the side panel on/off
 
 ## Technical Details
 
-- **Manifest Version**: 3 (latest Chrome extension standard)
-- **Permissions**: Storage, Active Tab
-- **Host Permissions**: `*.zendesk.com`
+- **Manifest Version:** 3
+- **Permissions:** Storage, Active Tab, Tabs, Side Panel
+- **Host Permissions:** `*.zendesk.com`
 
-## Development
+### Extension (`extension/`)
 
-The extension consists of:
-- `manifest.json` - Extension configuration
-- `content.js` - Content script that runs on Zendesk pages
-- `sidebar.css` - Styles for the sidebar UI
-- `options.html/js` - Settings page
-- `popup.html/js` - Extension popup
-- `icons/` - Extension icons
+| File | Purpose |
+|------|---------|
+| `manifest.json` | Extension configuration |
+| `background.js` | Enables side panel on icon click |
+| `content.js` | Extracts ticket data from Zendesk DOM |
+| `sidepanel.html/css/js` | Side panel UI and data rendering |
+| `options.html/js` | Settings page |
+| `popup.html/js` | Extension popup |
+| `icons/` | Extension icons |
+
+### Proxy (`proxy/`)
+
+Backend service for secure Zendesk OAuth token exchange and API proxying. Deployed via Coolify. See `proxy/README.md` (coming soon).
 
 ### Running Checks Locally
 
@@ -118,12 +97,8 @@ These checks are automatically run in CI on every push and pull request.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please open a Pull Request. All work follows TDD (tests first).
 
 ## License
 
-MIT License - see LICENSE file for details
-
-## Support
-
-For issues, questions, or suggestions, please open an issue on GitHub.
+MIT License — see LICENSE file for details.
