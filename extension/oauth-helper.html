@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extension ID Helper</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .info-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-card h2 {
+      color: #667eea;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .info-card .value {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      color: #333;
+      background: white;
+      padding: 12px;
+      border-radius: 6px;
+      word-break: break-all;
+      border: 1px solid #e0e0e0;
+      position: relative;
+    }
+
+    .copy-button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+
+    .copy-button:hover {
+      background: #5568d3;
+    }
+
+    .copy-button:active {
+      transform: scale(0.98);
+    }
+
+    .copy-button.copied {
+      background: #10b981;
+    }
+
+    .instructions {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+    }
+
+    .instructions h3 {
+      color: #856404;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .instructions ol {
+      margin-left: 20px;
+      color: #856404;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .instructions code {
+      background: #fff;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+      color: #d63384;
+    }
+
+    .warning {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+      color: #721c24;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .loading {
+      color: #999;
+      font-style: italic;
+    }
+
+    a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 OAuth Configuration Helper</h1>
+    <p class="subtitle">Chrome Extension ID and Redirect URI</p>
+
+    <div class="info-card">
+      <h2>Extension ID</h2>
+      <div class="value" id="extension-id">
+        <span class="loading">Loading...</span>
+      </div>
+      <button class="copy-button" id="copy-id" disabled>Copy Extension ID</button>
+    </div>
+
+    <div class="info-card">
+      <h2>OAuth Redirect URI (for Zendesk)</h2>
+      <div class="value" id="redirect-uri">
+        <span class="loading">Loading...</span>
+      </div>
+      <button class="copy-button" id="copy-uri" disabled>Copy Redirect URI</button>
+    </div>
+
+    <div class="info-card">
+      <h2>CORS Origin (for Proxy)</h2>
+      <div class="value" id="cors-origin">
+        <span class="loading">Loading...</span>
+      </div>
+      <button class="copy-button" id="copy-cors" disabled>Copy CORS Origin</button>
+    </div>
+
+    <div class="instructions">
+      <h3>📋 Next Steps:</h3>
+      <ol>
+        <li>Copy the <strong>Redirect URI</strong> above</li>
+        <li>Go to Zendesk Admin Center → Apps and integrations → APIs → OAuth Clients</li>
+        <li>Add the redirect URI to your OAuth client's <code>Redirect URLs</code></li>
+        <li>Copy the <strong>CORS Origin</strong> above</li>
+        <li>Add it to your proxy's <code>ALLOWED_ORIGINS</code> environment variable</li>
+        <li>Restart your proxy server if needed</li>
+      </ol>
+    </div>
+
+    <div class="warning">
+      ⚠️ <strong>Important:</strong> Extension IDs are different between unpacked and published versions. 
+      If you reload an unpacked extension, the ID may change. You'll need to update both Zendesk and 
+      proxy configurations if this happens. See 
+      <a href="https://github.com/Skeyelab/zendesk-chrome-extension/blob/main/OAUTH_SETUP.md" target="_blank">OAUTH_SETUP.md</a> 
+      for details.
+    </div>
+  </div>
+
+  <script>
+    // Get extension information
+    const extensionId = chrome.runtime.id;
+    const redirectUri = chrome.identity.getRedirectURL();
+    const corsOrigin = `chrome-extension://${extensionId}`;
+
+    // Display the information
+    document.getElementById('extension-id').textContent = extensionId;
+    document.getElementById('redirect-uri').textContent = redirectUri;
+    document.getElementById('cors-origin').textContent = corsOrigin;
+
+    // Log to console for easy access
+    console.log('Extension ID:', extensionId);
+    console.log('Redirect URI:', redirectUri);
+    console.log('CORS Origin:', corsOrigin);
+
+    // Enable copy buttons
+    document.getElementById('copy-id').disabled = false;
+    document.getElementById('copy-uri').disabled = false;
+    document.getElementById('copy-cors').disabled = false;
+
+    // Copy to clipboard functionality
+    function copyToClipboard(text, button) {
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = button.textContent;
+        button.textContent = '✓ Copied!';
+        button.classList.add('copied');
+        
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove('copied');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+        alert('Failed to copy to clipboard. Please copy manually.');
+      });
+    }
+
+    document.getElementById('copy-id').addEventListener('click', function() {
+      copyToClipboard(extensionId, this);
+    });
+
+    document.getElementById('copy-uri').addEventListener('click', function() {
+      copyToClipboard(redirectUri, this);
+    });
+
+    document.getElementById('copy-cors').addEventListener('click', function() {
+      copyToClipboard(corsOrigin, this);
+    });
+  </script>
+</body>
+</html>
