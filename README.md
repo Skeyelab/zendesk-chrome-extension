@@ -32,6 +32,22 @@ proxy/       Backend proxy for Zendesk OAuth + API (deployed via Coolify)
 
 5. The extension icon should appear in your Chrome toolbar
 
+## OAuth Setup
+
+To enable OAuth authentication with Zendesk (required for API access):
+
+1. **Quick Start:** Follow the [OAuth Setup Checklist](./OAUTH_SETUP_CHECKLIST.md)
+2. **Detailed Guide:** See [OAuth Setup Documentation](./OAUTH_SETUP.md)
+3. **Helper Tool:** Run `node scripts/get-extension-id.js` to get your extension ID and redirect URIs
+
+**Key Steps:**
+- Create a Zendesk OAuth client (Admin Center → APIs → OAuth Clients)
+- Set client kind to **Confidential**
+- Add redirect URI: `https://<EXTENSION_ID>.chromiumapp.org/`
+- Configure proxy with client credentials
+
+See documentation for complete setup instructions.
+
 ## Usage
 
 1. Navigate to any Zendesk ticket page

@@ -2,6 +2,19 @@
 
 Backend proxy service for secure Zendesk OAuth token exchange and API proxying. This service handles OAuth authorization code exchange with Zendesk and manages session tokens for the Chrome extension.
 
+## ⚠️ OAuth Setup Required
+
+Before using this proxy, you must set up OAuth authentication with Zendesk:
+
+1. **Quick Start:** Follow [OAuth Setup Checklist](../OAUTH_SETUP_CHECKLIST.md)
+2. **Detailed Guide:** See [OAuth Setup Documentation](../OAUTH_SETUP.md)
+3. **Helper Script:** Run `node ../scripts/get-extension-id.js` to get configuration values
+
+**You will need:**
+- Zendesk OAuth client ID and secret (from Zendesk Admin Center)
+- Chrome extension ID (from `chrome://extensions/`)
+- Session secret (generate with `openssl rand -hex 32`)
+
 ## Features
 
 - **OAuth Token Exchange**: Exchanges OAuth authorization codes for access/refresh tokens
@@ -68,14 +81,16 @@ The proxy uses an **in-memory session store** by default for simplicity. Each se
 
 ## Environment Variables
 
+**📖 See [OAuth Setup Guide](../OAUTH_SETUP.md) for instructions on obtaining these values.**
+
 Required environment variables:
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `ZENDESK_CLIENT_ID` | Zendesk OAuth client ID | `your_client_id` |
-| `ZENDESK_CLIENT_SECRET` | Zendesk OAuth client secret | `your_client_secret` |
-| `SESSION_SECRET` | Secret for session token generation | `random_secure_string` |
-| `ALLOWED_ORIGINS` | Comma-separated CORS origins | `chrome-extension://abc123,chrome-extension://def456` |
+| Variable | Description | Example | How to get |
+|----------|-------------|---------|-----------|
+| `ZENDESK_CLIENT_ID` | Zendesk OAuth client ID | `your_client_id` | From Zendesk Admin Center OAuth client |
+| `ZENDESK_CLIENT_SECRET` | Zendesk OAuth client secret | `your_client_secret` | From Zendesk Admin Center OAuth client |
+| `SESSION_SECRET` | Secret for session token generation | `random_secure_string` | Generate: `openssl rand -hex 32` |
+| `ALLOWED_ORIGINS` | Comma-separated CORS origins | `chrome-extension://abc123` | Use extension ID from Chrome |
 
 Optional environment variables:
 
