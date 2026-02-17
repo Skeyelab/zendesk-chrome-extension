@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-env node */
+
 /**
  * Helper script to get Chrome Extension ID and generate OAuth redirect URI
  * 
