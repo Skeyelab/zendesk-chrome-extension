@@ -1,0 +1,25 @@
+# Ignore for Docker build
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+tests/
+coverage/
+vitest.config.js
+
+# Development
+.eslintrc.json
+nodemon.json
+
+# Environment examples
+.env.example
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+!README.md

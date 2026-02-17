@@ -11,8 +11,8 @@ on:
       - master
 
 jobs:
-  lint-and-validate:
-    name: Lint and Validate
+  extension-lint-and-validate:
+    name: Extension - Lint and Validate
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,3 +35,35 @@ jobs:
       
       - name: Validate manifest.json
         run: npm run validate:manifest
+
+  proxy-test:
+    name: Proxy - Test and Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    defaults:
+      run:
+        working-directory: proxy
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: proxy/package-lock.json
+      
+      - name: Install proxy dependencies
+        run: npm ci
+      
+      - name: Run proxy linter
+        run: npm run lint
+      
+      - name: Run proxy tests
+        run: npm test
+        env:
+          NODE_ENV: test

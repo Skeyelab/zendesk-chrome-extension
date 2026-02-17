@@ -30,14 +30,6 @@ describe('POST /auth/callback', () => {
     });
 
     it('should exchange code for tokens with Zendesk', async () => {
-      // Mock successful token exchange
-      const mockZendeskResponse = {
-        access_token: 'mock_access_token',
-        refresh_token: 'mock_refresh_token',
-        expires_in: 3600,
-        token_type: 'Bearer'
-      };
-
       // We'll implement mocking in the actual implementation
       const response = await request(app)
         .post('/auth/callback')
